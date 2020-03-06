@@ -3,8 +3,13 @@
 #include "ratio_segmentation.hh"
 
 #include "sparse_matrix_description.hh"
-#include "ClpSimplex.hpp"
+
+#ifdef HAS_VNK_GRAPH
 #include "graph.h"
+#endif
+
+#ifdef HAS_CBC
+#include "ClpSimplex.hpp"
 
 #include "CbcModel.hpp"
 #include "OsiClpSolverInterface.hpp"
@@ -22,6 +27,7 @@
 
 #include "CbcHeuristic.hpp"
 #include "CbcBranchActual.hpp"
+#endif
 
 #include "timing.hh"
 
@@ -59,7 +65,7 @@
 void mr_lp_segment(const Math3D::ColorImage<float>& input, double lambda, double curv_power, uint neighborhood,
                    Math3D::ColorImage<float>& output, bool bruckstein)
 {
-
+#ifdef HAS_CBC
   bool node_constraints = true;
   bool edge_constraints = true;
 
@@ -782,7 +788,6 @@ void mr_lp_segment(const Math3D::ColorImage<float>& input, double lambda, double
   }
 #endif
 
-
   std::cerr << "solution contains " << nFrac << " fractional values" << std::endl;
-
+#endif
 }
